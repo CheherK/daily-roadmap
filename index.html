@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Field Manual</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: #0e0e0e;
+    color: #e8e0d0;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .top-header {
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .top-header .label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #7a7060;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .top-header h1 {
+    font-size: 26px;
+    font-weight: normal;
+    color: #f0e8d8;
+    line-height: 1.2;
+  }
+
+  .top-header .sub {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #6a6050;
+    margin-top: 0.4rem;
+  }
+
+  .date-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .date-badge {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #c8a96e;
+    background: #1e1a12;
+    border: 1px solid #3a3020;
+    padding: 4px 12px;
+    border-radius: 3px;
+  }
+
+  .streak {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #5a8a5a;
+  }
+
+  .section { margin-bottom: 2.5rem; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-header .num {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #4a4035;
+    min-width: 20px;
+  }
+
+  .section-header h2 {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #7a7060;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: #1e1e1e;
+  }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 10px; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .check-item:hover { border-color: #2e2e2e; background: #161616; }
+
+  .check-item.done {
+    background: #101a10;
+    border-color: #1e3a1e;
+  }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 1px solid #3a3530;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: all 0.2s;
+  }
+
+  .check-item.done .check-box {
+    background: #2a5a2a;
+    border-color: #3a7a3a;
+  }
+
+  .check-box i { font-size: 13px; color: #6ada6a; opacity: 0; transition: opacity 0.2s; }
+  .check-item.done .check-box i { opacity: 1; }
+
+  .check-text { flex: 1; }
+  .check-text .title {
+    font-size: 15px;
+    color: #d8d0c0;
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .check-item.done .check-text .title {
+    color: #5a7a5a;
+    text-decoration: line-through;
+    text-decoration-color: #3a5a3a;
+  }
+  .check-text .sub {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #5a5040;
+    margin-top: 3px;
+  }
+  .check-item.done .check-text .sub { color: #3a4a3a; }
+
+  /* PROTOCOL STEPS */
+  .protocol-group { margin-bottom: 1.5rem; }
+
+  .proto-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #5a5040;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    padding-left: 4px;
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 6px; }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    padding: 12px 14px;
+    background: #111111;
+    border: 1px solid #1a1a1a;
+    border-radius: 5px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #c8a96e;
+    min-width: 18px;
+    margin-top: 2px;
+  }
+
+  .step-body { flex: 1; }
+  .step-body strong {
+    font-size: 14px;
+    color: #c8c0b0;
+    font-weight: normal;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .step-body span {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #4a4035;
+    line-height: 1.5;
+  }
+
+  /* EMERGENCY PROTOCOLS */
+  .emergency-cards { display: flex; flex-direction: column; gap: 10px; }
+
+  .e-card {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #2a2a2a;
+  }
+
+  .e-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .e-header:hover { filter: brightness(1.1); }
+
+  .e-header-left { display: flex; align-items: center; gap: 10px; }
+
+  .e-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    min-width: 8px;
+  }
+
+  .e-title {
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .e-card.shame .e-header { background: #1a1018; }
+  .e-card.shame .e-dot { background: #8a4a7a; }
+  .e-card.shame .e-title { color: #c896b4; }
+
+  .e-card.fail .e-header { background: #181410; }
+  .e-card.fail .e-dot { background: #8a6a3a; }
+  .e-card.fail .e-title { color: #c8a870; }
+
+  .e-card.weed .e-header { background: #101418; }
+  .e-card.weed .e-dot { background: #3a6a8a; }
+  .e-card.weed .e-title { color: #78aac8; }
+
+  .e-toggle { font-size: 14px; color: #3a3530; transition: transform 0.2s; }
+  .e-card.open .e-toggle { transform: rotate(180deg); }
+
+  .e-body {
+    display: none;
+    padding: 0 16px 16px;
+    background: #0e0e0e;
+    border-top: 1px solid #1e1e1e;
+  }
+
+  .e-card.open .e-body { display: block; }
+
+  .e-step {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #161616;
+    align-items: flex-start;
+  }
+
+  .e-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .e-step:first-child { padding-top: 14px; }
+
+  .e-step-num {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #4a4035;
+    min-width: 16px;
+    margin-top: 3px;
+  }
+
+  .e-step-text { font-size: 13px; color: #9a9080; line-height: 1.6; }
+  .e-step-text strong { color: #c8c0b0; font-weight: normal; }
+
+  /* PHASE TRACKER */
+  .phases { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  @media(max-width: 500px) { .phases { grid-template-columns: 1fr; } }
+
+  .phase-card {
+    padding: 14px 16px;
+    border-radius: 6px;
+    border: 1px solid #1e1e1e;
+    background: #111111;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-card.active {
+    border-color: #c8a96e;
+    background: #161208;
+  }
+
+  .phase-card .active-badge {
+    display: none;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #c8a96e;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .phase-card.active .active-badge { display: block; }
+
+  .phase-card .ph-title {
+    font-size: 13px;
+    color: #b8b0a0;
+    margin-bottom: 4px;
+  }
+
+  .phase-card.active .ph-title { color: #e8d8b0; }
+
+  .phase-card .ph-time {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #4a4035;
+    margin-bottom: 8px;
+  }
+
+  .phase-card.active .ph-time { color: #7a6a40; }
+
+  .phase-card .ph-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .phase-card .ph-items li {
+    font-size: 12px;
+    color: #4a4035;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+
+  .phase-card.active .ph-items li { color: #8a7a5a; }
+
+  .phase-card .ph-items li::before {
+    content: '—';
+    color: #2a2520;
+    flex-shrink: 0;
+  }
+
+  .phase-card.active .ph-items li::before { color: #5a4a2a; }
+
+  /* CORE LAWS */
+  .laws { display: flex; flex-direction: column; gap: 8px; }
+
+  .law {
+    display: flex;
+    gap: 16px;
+    padding: 14px 16px;
+    background: #0e0e0e;
+    border: 1px solid #1a1a1a;
+    border-left: 2px solid #2a2520;
+    border-radius: 0 5px 5px 0;
+    align-items: flex-start;
+  }
+
+  .law-num {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #c8a96e;
+    min-width: 18px;
+    margin-top: 2px;
+  }
+
+  .law-body strong {
+    font-size: 14px;
+    color: #d8d0c0;
+    font-weight: normal;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .law-body span {
+    font-size: 13px;
+    color: #5a5040;
+    line-height: 1.5;
+  }
+
+  /* MANTRA */
+  .mantra {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1a1a1a;
+    text-align: center;
+  }
+
+  .mantra p {
+    font-size: 15px;
+    color: #4a4035;
+    font-style: italic;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .mantra .sig {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #2a2520;
+    margin-top: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* progress bar */
+  .progress-bar-wrap {
+    background: #1a1a1a;
+    border-radius: 3px;
+    height: 3px;
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: #c8a96e;
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+
+  .progress-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #5a5040;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  .reset-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #3a3530;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .reset-btn:hover { color: #6a6050; }
+</style>
+
+<div class="container">
+
+  <div class="top-header">
+    <div class="label">Personal field manual</div>
+    <h1>Your Daily Roadmap</h1>
+    <div class="sub">Read this every morning. No exceptions.</div>
+    <div class="date-line">
+      <div class="date-badge" id="date-display">loading...</div>
+      <div class="streak" id="streak-display"></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+    <div class="progress-label" id="progress-label">0 / 5 completed today</div>
+    <button class="reset-btn" onclick="resetAll()">↺ reset day</button>
+  </div>
+
+  <!-- SECTION 1: NON-NEGOTIABLES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="num">01</span>
+      <h2>Today's non-negotiables</h2>
+      <div class="line"></div>
+    </div>
+    <div class="checklist" id="checklist">
+
+      <div class="check-item" data-id="0" onclick="toggle(0)">
+        <div class="check-box"><i class="ti ti-check"></i></div>
+        <div class="check-text">
+          <div class="title">No weed today</div>
+          <div class="sub">Your dopamine system cannot recover while this is active. This is the one.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-id="1" onclick="toggle(1)">
+        <div class="check-box"><i class="ti ti-check"></i></div>
+        <div class="check-text">
+          <div class="title">2 hours of deep work — one task, no phone, no tabs</div>
+          <div class="sub">Set timer. Close everything. One thing only. This is the minimum acceptable day.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-id="2" onclick="toggle(2)">
+        <div class="check-box"><i class="ti ti-check"></i></div>
+        <div class="check-text">
+          <div class="title">Move your body — 30 min minimum</div>
+          <div class="sub">Walk, run, gym. This is not optional. Exercise rebuilds the dopamine system you need.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-id="3" onclick="toggle(3)">
+        <div class="check-box"><i class="ti ti-check"></i></div>
+        <div class="check-text">
+          <div class="title">Sleep before midnight</div>
+          <div class="sub">Every hour lost to sleep debt comes out of your willpower and focus budget tomorrow.</div>
+        </div>
+      </div>
+
+      <div class="check-item" data-id="4" onclick="toggle(4)">
+        <div class="check-box"><i class="ti ti-check"></i></div>
+        <div class="check-text">
+          <div class="title">No self-blame — only behavioral language</div>
+          <div class="sub">If you slip: "I made a bad choice today" — not "I am a failure." Precision over brutality.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 2: DAILY PROTOCOL -->
+  <div class="section">
+    <div class="section-header">
+      <span class="num">02</span>
+      <h2>The daily protocol</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="protocol-group">
+      <div class="proto-label">Morning — before anything else</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <strong>Write your ONE task for today</strong>
+            <span>Not a list. One specific thing on the app or your skill. "Finish the login screen." "Complete the API endpoint." Specific.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <strong>Set up your environment before you start</strong>
+            <span>IDE open. Phone in another room or on airplane mode. Cold Turkey / Freedom blocker activated. Nothing else open.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <strong>Start the timer. Work.</strong>
+            <span>25 minutes. One thing. When it rings — 5-min break, then another 25. Four blocks = your minimum successful day.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="protocol-group">
+      <div class="proto-label">During the day — when resistance hits</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <strong>Notice the urge to escape — name it out loud</strong>
+            <span>"This is anxiety." "This is discomfort." Naming the feeling reduces its intensity neurologically. Do not act on it for 60 seconds.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <div class="step-body">
+            <strong>If you already escaped — 5-minute restart rule</strong>
+            <span>Do not plan a comeback day. Open your laptop. Set a 5-minute timer. Do one tiny thing. That is the entire instruction.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="protocol-group">
+      <div class="proto-label">Evening — 10 minutes before bed</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">06</div>
+          <div class="step-body">
+            <strong>Write tomorrow's ONE task right now</strong>
+            <span>Decide it tonight, not in the morning when willpower is already compromised by the day.</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">07</div>
+          <div class="step-body">
+            <strong>One sentence review — behavior only, no verdict</strong>
+            <span>"I completed 3 blocks and skipped exercise." Not "I was lazy." Facts, not identity. Then close the book.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: EMERGENCY PROTOCOLS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="num">03</span>
+      <h2>Emergency protocols</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="emergency-cards">
+
+      <!-- SHAME SPIRAL -->
+      <div class="e-card shame" id="ec0">
+        <div class="e-header" onclick="toggleCard(0)">
+          <div class="e-header-left">
+            <div class="e-dot"></div>
+            <div class="e-title">The shame spiral is hitting</div>
+          </div>
+          <i class="ti ti-chevron-down e-toggle"></i>
+        </div>
+        <div class="e-body">
+          <div class="e-step">
+            <div class="e-step-num">01</div>
+            <div class="e-step-text">Stop. Breathe. Say out loud: <strong>"This is shame. It is a feeling, not a fact."</strong> Naming it reduces its neurological grip immediately.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">02</div>
+            <div class="e-step-text">Translate every identity statement to a behavioral one. <strong>"I am a failure"</strong> → <strong>"I made a choice I don't want to repeat."</strong> Only the second form is actionable.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">03</div>
+            <div class="e-step-text">Ask yourself: <strong>"What would I say to a close friend in this exact situation?"</strong> Write the answer. That is the truth. Apply it to yourself.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">04</div>
+            <div class="e-step-text">Take one micro-action in the next 2 minutes. Open the editor. Read one page. Write one line. <strong>Action breaks the spiral. Nothing else does.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAILURE / MISSED COMMITMENT -->
+      <div class="e-card fail" id="ec1">
+        <div class="e-header" onclick="toggleCard(1)">
+          <div class="e-header-left">
+            <div class="e-dot"></div>
+            <div class="e-title">Failed to commit / wasted the day</div>
+          </div>
+          <i class="ti ti-chevron-down e-toggle"></i>
+        </div>
+        <div class="e-body">
+          <div class="e-step">
+            <div class="e-step-num">01</div>
+            <div class="e-step-text"><strong>24-hour rule:</strong> No character-level conclusions for 24 hours. You may note the behavior. You may not conclude anything about your identity or future from it.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">02</div>
+            <div class="e-step-text"><strong>Never miss twice.</strong> Missing once is an accident. Missing twice is a new habit forming. The only commitment now: show up tomorrow, even imperfectly.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">03</div>
+            <div class="e-step-text"><strong>5-minute restart right now.</strong> Not a perfect comeback. Not a new plan. Open the laptop. Set 5 minutes. Start. That is it.</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">04</div>
+            <div class="e-step-text">After 24 hours: 3 questions only — <strong>What triggered it? What setup was missing? What is one adjustment?</strong> No court case. Only data and one fix.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEED CALLING -->
+      <div class="e-card weed" id="ec2">
+        <div class="e-header" onclick="toggleCard(2)">
+          <div class="e-header-left">
+            <div class="e-dot"></div>
+            <div class="e-title">The weed is calling</div>
+          </div>
+          <i class="ti ti-chevron-down e-toggle"></i>
+        </div>
+        <div class="e-body">
+          <div class="e-step">
+            <div class="e-step-num">01</div>
+            <div class="e-step-text">Name what you are actually feeling right now. <strong>Not "I want to relax."</strong> What is the real thing underneath? Stress? Anxiety? Fear that the work won't be good enough?</div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">02</div>
+            <div class="e-step-text">Remember: it will silence the version of you that cares. You said this yourself. That's not relief — <strong>that is you choosing to mute your own ambition.</strong></div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">03</div>
+            <div class="e-step-text">Use the prepared replacement: walk outside for 15 minutes, cold shower, call someone, 20 minutes of gaming with a hard stop. <strong>You need an outlet, not a shutdown.</strong></div>
+          </div>
+          <div class="e-step">
+            <div class="e-step-num">04</div>
+            <div class="e-step-text">Remind yourself: every day clean is one more day of your dopamine system repairing itself. <strong>The motivation you're waiting to feel — this is how it comes back.</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4: ROADMAP PHASES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="num">04</span>
+      <h2>Your roadmap — where you are</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="phases">
+
+      <div class="phase-card active">
+        <div class="active-badge">▶ You are here</div>
+        <div class="ph-title">Phase 0 — Stop the bleeding</div>
+        <div class="ph-time">Weeks 1–4</div>
+        <ul class="ph-items">
+          <li>30-day cannabis reset</li>
+          <li>Identify your escape triggers</li>
+          <li>Prepare a replacement for each trigger</li>
+          <li>Let dopamine system repair</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="active-badge">▶ You are here</div>
+        <div class="ph-title">Phase 1 — Rebuild the foundation</div>
+        <div class="ph-time">Weeks 1–6</div>
+        <ul class="ph-items">
+          <li>2hr deep work daily, same time</li>
+          <li>Sleep 7–8hrs, exercise 3–4×/week</li>
+          <li>Hard blocker on all distractions</li>
+          <li>Track time honestly (Toggl)</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="active-badge">▶ You are here</div>
+        <div class="ph-title">Phase 2 — Direction and identity</div>
+        <div class="ph-time">Months 1–3</div>
+        <ul class="ph-items">
+          <li>Ship the app — 90-day sprint</li>
+          <li>Define the MVP and ship date today</li>
+          <li>Weekly accountability partner</li>
+          <li>Replace shame reflex with data</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="active-badge">▶ You are here</div>
+        <div class="ph-title">Phase 3 — Income growth</div>
+        <div class="ph-time">Months 3–12</div>
+        <ul class="ph-items">
+          <li>Apply to remote EU/NA jobs</li>
+          <li>Build one specific freelance offer</li>
+          <li>One technical specialization</li>
+          <li>LinkedIn profile rebuilt and active</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 12px; text-align: center;">
+      <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #3a3530; margin-bottom: 8px;">which phase are you in right now?</div>
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+        <button onclick="setPhase(0)" style="font-family: 'Courier New', monospace; font-size: 10px; background: none; border: 1px solid #2a2520; color: #6a5a40; padding: 5px 12px; border-radius: 3px; cursor: pointer; letter-spacing: 0.05em;" onmouseover="this.style.borderColor='#4a3a28'" onmouseout="this.style.borderColor='#2a2520'">Phase 0</button>
+        <button onclick="setPhase(1)" style="font-family: 'Courier New', monospace; font-size: 10px; background: none; border: 1px solid #2a2520; color: #6a5a40; padding: 5px 12px; border-radius: 3px; cursor: pointer; letter-spacing: 0.05em;" onmouseover="this.style.borderColor='#4a3a28'" onmouseout="this.style.borderColor='#2a2520'">Phase 1</button>
+        <button onclick="setPhase(2)" style="font-family: 'Courier New', monospace; font-size: 10px; background: none; border: 1px solid #2a2520; color: #6a5a40; padding: 5px 12px; border-radius: 3px; cursor: pointer; letter-spacing: 0.05em;" onmouseover="this.style.borderColor='#4a3a28'" onmouseout="this.style.borderColor='#2a2520'">Phase 2</button>
+        <button onclick="setPhase(3)" style="font-family: 'Courier New', monospace; font-size: 10px; background: none; border: 1px solid #2a2520; color: #6a5a40; padding: 5px 12px; border-radius: 3px; cursor: pointer; letter-spacing: 0.05em;" onmouseover="this.style.borderColor='#4a3a28'" onmouseout="this.style.borderColor='#2a2520'">Phase 3</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CORE LAWS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="num">05</span>
+      <h2>The 6 laws — always</h2>
+      <div class="line"></div>
+    </div>
+    <div class="laws">
+
+      <div class="law">
+        <div class="law-num">I</div>
+        <div class="law-body">
+          <strong>Shame does not produce change. Guilt does.</strong>
+          <span>"I did something bad" is actionable. "I am bad" is paralysis. Always translate to behavior.</span>
+        </div>
+      </div>
+
+      <div class="law">
+        <div class="law-num">II</div>
+        <div class="law-body">
+          <strong>Never miss twice.</strong>
+          <span>Miss once — it's an accident. Miss twice — it's a pattern. The only rule is: always show up the next day.</span>
+        </div>
+      </div>
+
+      <div class="law">
+        <div class="law-num">III</div>
+        <div class="law-body">
+          <strong>Environment beats willpower every time.</strong>
+          <span>Structure the environment so good behavior is easy and temptation requires effort. Willpower is fuel — spend it wisely.</span>
+        </div>
+      </div>
+
+      <div class="law">
+        <div class="law-num">IV</div>
+        <div class="law-body">
+          <strong>2 hours of real work is better than 8 hours of distracted work.</strong>
+          <span>Protect the 2-hour block like it is the most valuable appointment of your day — because it is.</span>
+        </div>
+      </div>
+
+      <div class="law">
+        <div class="law-num">V</div>
+        <div class="law-body">
+          <strong>Procrastination is an emotional problem, not a time problem.</strong>
+          <span>When you avoid — ask what feeling you are running from. Name it. Then take the smallest possible action anyway.</span>
+        </div>
+      </div>
+
+      <div class="law">
+        <div class="law-num">VI</div>
+        <div class="law-body">
+          <strong>The gap is 3–5 years of real effort, not a lifetime.</strong>
+          <span>You already spent 5 years earning a degree. You know how to sustain effort. The conditions just need to be right again.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CLOSING MANTRA -->
+  <div class="mantra">
+    <p>The version of you that graduated as a software engineer from Tunisia — disciplined, capable, persistent — is the same person reading this. He is not gone. He just needs the right conditions to come back. You are building those conditions, one day at a time.</p>
+    <div class="sig">field manual v1.0 — your honest roadmap</div>
+  </div>
+
+</div>
+
+<script>
+  const state = { done: [false,false,false,false,false], phase: 0 };
+
+  function toggle(id) {
+    state.done[id] = !state.done[id];
+    const item = document.querySelector('[data-id="'+id+'"]');
+    item.classList.toggle('done', state.done[id]);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const count = state.done.filter(Boolean).length;
+    const pct = Math.round((count / 5) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = count + ' / 5 completed today';
+    if (count === 5) {
+      document.getElementById('progress-label').textContent = '✓ All done — strong day.';
+      document.getElementById('progress-fill').style.background = '#4a9a4a';
+    } else {
+      document.getElementById('progress-fill').style.background = '#c8a96e';
+    }
+  }
+
+  function resetAll() {
+    state.done = [false,false,false,false,false];
+    document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done'));
+    updateProgress();
+  }
+
+  function toggleCard(id) {
+    const card = document.getElementById('ec' + id);
+    card.classList.toggle('open');
+  }
+
+  function setPhase(p) {
+    state.phase = p;
+    const cards = document.querySelectorAll('.phase-card');
+    cards.forEach((c, i) => c.classList.toggle('active', i === p));
+  }
+
+  function updateDate() {
+    const now = new Date();
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('date-display').textContent =
+      days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getFullYear();
+  }
+
+  updateDate();
+</script>
+</html>
